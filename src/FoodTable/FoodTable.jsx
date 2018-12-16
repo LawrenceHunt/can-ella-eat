@@ -4,7 +4,6 @@ import './FoodTable.css'
 export default class FoodTable extends Component {
 
   renderNewCategoryForm() {
-    console.log('getting here...')
     return (
       <tr>
         <th>

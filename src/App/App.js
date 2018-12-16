@@ -96,7 +96,10 @@ class App extends Component {
 
     const newState = {...this.state[itemType]}
     newState[id] = payload
-    this.setState({[itemType]: newState})
+    this.setState({
+      [itemType]: newState,
+      action: null
+    })
   }
 
   cancelAction = () => {
@@ -110,22 +113,29 @@ class App extends Component {
   }
 
   getFilteredResults() {
-    const {searchInput} = this.state
-    const filterPred = value => value.label.indexOf(searchInput) > -1
-
+    const filterPred = value => value.label.indexOf(this.state.searchInput) > -1
     const matchingCategories = Object.values(this.state.categories).filter(filterPred)
     const matchingFoods = Object.values(this.state.foods).filter(filterPred)
 
-    const filteredItems = {
-      'Uncategorized': matchingFoods,
+    const filteredItems = {}
 
+    // add the matching categories along with their items
+    for (let cat of matchingCategories) {
+      filteredItems[cat.id] = Object.values(this.state.foods).map(f => {
+        if (f.category === cat.id) {
+          f.directSearchMatch = false
+        }
+        return f
+      })
     }
 
-    for (let category of matchingCategories) {
-      filteredItems[category.label] = []
-    }
+    const filteredItemsWithIndividual = matchingFoods.reduce((acc, next) => {
+      if (!acc[next.category]) acc[next.category] = [next]
+      else acc[next.category].push(next)
+      return acc
+    }, filteredItems)
 
-    return filteredItems
+    return filteredItemsWithIndividual
   }
 
 
@@ -150,6 +160,7 @@ class App extends Component {
           confirmAction = {this.confirmAction}
           cancelAction  = {this.cancelAction}
           deleteItem    = {this.deleteItem}
+          getItemById   = {this.getItemById}
         />
 
         <CreateEditModal
