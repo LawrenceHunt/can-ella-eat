@@ -1,11 +1,21 @@
+.food-table-container {
+  margin: auto 15px;
+}
+
+.create-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
 .food-table {
+  width: 100%;
   border-collapse: collapse;
-  width: 50%;
   border: 1px solid black;
   margin: auto;
 
 }
 
-tr {
+tr, th, td {
   border: 1px solid black;
 }

@@ -1,14 +1,17 @@
 @import url('https://fonts.googleapis.com/css?family=Yeseva+One');
 @import url('https://fonts.googleapis.com/css?family=Roboto');
 
-
+html, body, #root, .App {
+  height: 100%;
+  margin: 0;
+  top: 0;
+}
 
 body {
   /* font-family: 'Yeseva One', cursive; */
   font-family: 'Roboto', sans-serif;
   /* background: #EEBB22; */
 }
-
 
 .App {
   text-align: center;
@@ -19,22 +22,7 @@ body {
   height: 40vmin;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
+@keyframes spin {
   from {
     transform: rotate(0deg);
   }

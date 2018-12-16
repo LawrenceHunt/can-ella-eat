@@ -1,58 +1,112 @@
-import React, { Component } from 'react';
-import './App.css';
-import {base, db} from '../firebase'
-import FoodTable from '../FoodTable/FoodTable'
-import {generateId} from '../_util'
-
+import React, {Component} from 'react'
+import {base, db}         from '../firebase'
+import FoodTable          from '../FoodTable/FoodTable'
+import {generateId}       from '../_util'
+import CreateEditModal    from '../CreateEditModal/CreateEditModal'
+import SearchBar          from '../SearchBar/SearchBar'
+import './App.css'
 
 class App extends Component {
 
   state = {
     foods       : {},
     categories  : {},
-    newFood     : App.emptyNewFood(),
-    searchInput : ''
+    searchInput : '',
+    action      : {}
   }
 
-  static emptyNewFood() {
-    return {
-      label     : '',
-      category  : 'none',
-      canEat    : true,
-      notes     : ''
+  static createNewItem(key) {
+    const id = generateId()
+    const types = {
+      'foods': {
+        label     : '',
+        canEat    : true,
+        notes     : ''
+      },
+      'categories': {
+        label     : '',
+      }
     }
+
+    return Object.assign({}, types[key], {id})
   }
+
+  getItemById = (type, id) =>
+    this.state[type].find(item =>
+      item.id === id)
 
   componentWillMount() {
-    this.foodsRef = base.syncState('foods/', {
-      context: this,
-      state: 'foods'
-    })
+    this.foodsRef = base.syncState('foods/',
+      {
+        context: this,
+        state: 'foods'
+      }
+    )
   }
 
   componentWillUnmount() {
     base.removeBinding(this.foodsRef)
   }
 
-  changeNewFoodProperty(key, value) {
-    const newState = {...this.state}
-    newState.newFood[key] = value
-    this.setState({newState})
+
+  startAction = (actionObj) => {
+
+    console.log('starting an action with...', actionObj)
+    let newAction
+
+    switch(actionObj.type) {
+      case 'create':
+        newAction = {
+          type: 'create',
+          itemType: actionObj.itemType,
+          payload: App.createNewItem(actionObj.itemType)
+        }
+
+        if (actionObj.itemType === 'foods') {
+          newAction.payload.category = actionObj.category || 'none'
+        }
+        break
+
+      case 'edit':
+        newAction = {
+          type: 'edit',
+          itemType: actionObj.itemType,
+          payload: this.state[actionObj.itemType][actionObj.id]
+        }
+        break
+
+      default:
+        console.warn('startAction called with no action type: ', actionObj)
+        return
+    }
+
+    this.setState({action: newAction})
   }
 
-  confirm = () => {
-    const newState = {...this.state}
-    const newId = generateId()
-    this.state.newFood.id = newId
-    newState.foods[newId] = this.state.newFood
-    newState.newFood = App.emptyNewFood()
-    this.setState(newState)
+  editAction = (key, value) => {
+    const newAction = {...this.state.action}
+    newAction.payload[key] = value
+    this.setState({action: newAction})
   }
 
-  deleteFood(foodId) {
-    const newFoodState = {...this.state.foods}
-    newFoodState[foodId] = null // firebase will not sync with a deleted item. must be turned to null.
-    this.setState({foods: newFoodState})
+  confirmAction = () => {
+    const { action } = this.state
+    const { itemType, payload } = action
+    const { id } = payload
+
+    const newState = {...this.state[itemType]}
+    newState[id] = payload
+    this.setState({[itemType]: newState})
+  }
+
+  cancelAction = () => {
+    this.setState({ action: null })
+  }
+
+  deleteItem = (key, id) => {
+    const newState = { ...this.state[key] }
+    newState[id] = null // firebase will not sync with a deleted item. must be turned to null.
+    this.setState({[key]: newState})
   }
 
   getFilteredResults() {
@@ -62,44 +116,45 @@ class App extends Component {
     const matchingCategories = Object.values(this.state.categories).filter(filterPred)
     const matchingFoods = Object.values(this.state.foods).filter(filterPred)
 
-    return matchingFoods
+    const filteredItems = {
+      'Uncategorized': matchingFoods,
+
+    }
+
+    for (let category of matchingCategories) {
+      filteredItems[category.label] = []
+    }
+
+    return filteredItems
   }
+
 
   render() {
     const items = this.getFilteredResults()
-    console.log('items', items)
 
     return (
       <div className="App">
+
         <h1>can Ella eat??</h1>
 
-        <div>
-          <input
-            className   = "searchbar"
-            type        = "text"
-            onChange    = {e => this.setState({searchInput: e.target.value})}
-            value       = {this.state.searchInput}
-            placeholder = "Plz can I has..."
-          />
-        </div>
-
-        <input
-          type     = "text"
-          onChange = {e => this.changeNewFoodProperty('label', e.target.value)}
-          value    = {this.state.newFood.label}
+        <SearchBar
+          searchInput = {this.state.searchInput}
+          onChange    = {e => this.setState({searchInput: e.target.value})}
         />
 
-      <button
-        onClick={this.confirm}
-      >
-        Create {this.state.newFood.label}
-      </button>
+        <FoodTable
+          items         = {items}
+          action        = {this.state.action}
+          startAction   = {this.startAction}
+          editAction    = {this.editAction}
+          confirmAction = {this.confirmAction}
+          cancelAction  = {this.cancelAction}
+          deleteItem    = {this.deleteItem}
+        />
 
-      <FoodTable
-        items      = {items}
-        deleteFood = {this.deleteFood.bind(this)}
-
-      />
+        <CreateEditModal
+          creating = {this.state.creating}
+        />
 
       </div>
     )
