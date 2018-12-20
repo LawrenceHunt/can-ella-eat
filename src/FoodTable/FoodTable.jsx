@@ -63,7 +63,7 @@ export default class FoodTable extends Component {
             : null}
 
 
-          {Object.entries(contentTree).map(([categoryId, items], i) => (
+          {Object.keys(contentTree).map((categoryId, i) => (
             <Fragment key={`category-${i}`}>
               <tr
                 className="category-row"
@@ -84,7 +84,7 @@ export default class FoodTable extends Component {
                 </th>
               </tr>
 
-              {Object.entries(items).map(([id, food], i) => (
+              {Object.entries(contentTree[categoryId].items).map(([id, food], i) => (
                 <tr
                   key       = {`food-${i}`}
                   className = "food-row"

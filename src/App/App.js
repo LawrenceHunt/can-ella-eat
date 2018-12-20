@@ -152,8 +152,9 @@ class App extends Component {
             // add the category to the tree if it isn't already there.
             if (!acc[categoryId]) {
               acc[categoryId] = {...this.getItemById('categories', categoryId)}
+              acc[categoryId].items = {}
             }
-            acc[categoryId][id] = item
+            acc[categoryId].items[id] = item
           }
           return acc
         }, matchingCategories)
