@@ -19,9 +19,9 @@ class App extends Component {
     const id = generateId()
     const types = {
       'foods': {
-        label     : '',
-        canEat    : true,
-        notes     : ''
+        label      : '',
+        canEat     : true,
+        notes      : ''
       },
       'categories': {
         label     : '',
@@ -31,9 +31,10 @@ class App extends Component {
     return Object.assign({}, types[key], {id})
   }
 
-  getItemById = (type, id) =>
-    this.state[type].find(item =>
-      item.id === id)
+  getItemById = (type, id) => {
+    if (type==='categories' && id==='none') return {label: 'None'}
+    return Object.values(this.state[type]).find(item => item.id === id)
+  }
 
   componentWillMount() {
     this.foodsRef = base.syncState('foods/',
@@ -57,13 +58,13 @@ class App extends Component {
     switch(actionObj.type) {
       case 'create':
         newAction = {
-          type: 'create',
-          itemType: actionObj.itemType,
-          payload: App.createNewItem(actionObj.itemType)
+          type     : 'create',
+          itemType : actionObj.itemType,
+          payload  : App.createNewItem(actionObj.itemType)
         }
 
         if (actionObj.itemType === 'foods') {
-          newAction.payload.category = actionObj.category || 'none'
+          newAction.payload.categoryId = actionObj.categoryId || 'none'
         }
         break
 
@@ -113,34 +114,58 @@ class App extends Component {
   }
 
   getFilteredResults() {
-    const filterPred = value => value.label.indexOf(this.state.searchInput) > -1
-    const matchingCategories = Object.values(this.state.categories).filter(filterPred)
-    const matchingFoods = Object.values(this.state.foods).filter(filterPred)
+    /*
+        return a tree object looking like this:
 
-    const filteredItems = {}
-
-    // add the matching categories along with their items
-    for (let cat of matchingCategories) {
-      filteredItems[cat.id] = Object.values(this.state.foods).map(f => {
-        if (f.category === cat.id) {
-          f.directSearchMatch = false
+        {
+          categoryId: {
+            matchesSearch: Boolean,
+            items: {
+              itemId: String,
+              matchesSearch: Boolean,
+              ...otherItemProps
+            }
+          }
         }
-        return f
-      })
-    }
+    */
 
-    const filteredItemsWithIndividual = matchingFoods.reduce((acc, next) => {
-      if (!acc[next.category]) acc[next.category] = [next]
-      else acc[next.category].push(next)
-      return acc
-    }, filteredItems)
+    const matchesSearch = item => item.label.indexOf(this.state.searchInput) > -1
 
-    return filteredItemsWithIndividual
+    const matchingCategories =
+      Object
+        .entries(this.state.categories)
+        .reduce((acc, [id, item]) => {
+          if (matchesSearch(item)) {
+            item.matchesSearch = true
+            acc[id] = item
+          }
+          return acc
+        }, {})
+
+    const withMatchingFoods =
+      Object
+        .entries(this.state.foods)
+        .reduce((acc, [id, item]) => {
+          if (matchesSearch(item)) {
+            item.matchesSearch = true
+            const categoryId = item.categoryId || 'none'
+            // add the category to the tree if it isn't already there.
+            if (!acc[categoryId]) {
+              acc[categoryId] = {...this.getItemById('categories', categoryId)}
+            }
+            acc[categoryId][id] = item
+          }
+          return acc
+        }, matchingCategories)
+
+    console.log('withMatchingFoods', withMatchingFoods)
+
+    return withMatchingFoods
   }
 
 
   render() {
-    const items = this.getFilteredResults()
+    const contentTree = this.getFilteredResults()
 
     return (
       <div className="App">
@@ -153,7 +178,7 @@ class App extends Component {
         />
 
         <FoodTable
-          items         = {items}
+          contentTree   = {contentTree}
           action        = {this.state.action}
           startAction   = {this.startAction}
           editAction    = {this.editAction}

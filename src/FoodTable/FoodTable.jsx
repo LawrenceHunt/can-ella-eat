@@ -32,9 +32,11 @@ export default class FoodTable extends Component {
   }
 
   render() {
-    const { items, action, startAction, editAction,
-            confirmAction, cancelAction, deleteItem } = this.props
+    const { contentTree, action, startAction, editAction,
+            confirmAction, cancelAction, deleteItem, getItemById } = this.props
 
+
+    console.log('contentTree', contentTree)
     return (
       <div className="food-table-container">
 
@@ -61,13 +63,13 @@ export default class FoodTable extends Component {
             : null}
 
 
-          {Object.entries(items).map(([category, items], i) => (
+          {Object.entries(contentTree).map(([categoryId, items], i) => (
             <Fragment key={`category-${i}`}>
               <tr
                 className="category-row"
               >
                 <th>
-                  {category}
+                  {getItemById('categories', categoryId).label}
                 </th>
 
                 <th>
@@ -82,19 +84,19 @@ export default class FoodTable extends Component {
                 </th>
               </tr>
 
-              {items.map((item, i) => (
+              {Object.entries(items).map(([id, food], i) => (
                 <tr
-                  key       = {`item-${i}`}
+                  key       = {`food-${i}`}
                   className = "food-row"
                 >
 
                   <td>
-                    {item.label}
+                    {food.label}
                   </td>
 
                   <td>
                     <button
-                      onClick={() => deleteItem('foods', item.id)}
+                      onClick={() => deleteItem('foods', food.id)}
                       >
                       Delete
                     </button>
