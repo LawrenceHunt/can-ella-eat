@@ -4,7 +4,7 @@ import './SearchBar.css'
 export default class SearchBar extends Component {
   render() {
     return (
-      <div>
+      <div className="margin-top">
         <input
           className   = "searchbar"
           type        = "text"

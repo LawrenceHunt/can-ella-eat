@@ -5,6 +5,9 @@ import {generateId}       from '../_util'
 import CreateEditModal    from '../CreateEditModal/CreateEditModal'
 import SearchBar          from '../SearchBar/SearchBar'
 import './App.css'
+import './buttons.css'
+import './colors.css'
+import '../font-awesome/css/all.min.css'
 
 class App extends Component {
 
@@ -20,7 +23,7 @@ class App extends Component {
     const types = {
       'foods': {
         label      : '',
-        canEat     : true,
+        canEat     : 'yes', // yes, maybe and no are the options
         notes      : ''
       },
       'categories': {
@@ -33,7 +36,7 @@ class App extends Component {
 
   getItemById = (type, id) => {
     if (type==='categories' && id==='none') return {label: 'None'}
-    return Object.values(this.state[type]).find(item => item.id === id)
+    return Object.values(this.state[type]).find(item => item && item.id === id)
   }
 
   componentWillMount() {
@@ -41,6 +44,12 @@ class App extends Component {
       {
         context: this,
         state: 'foods'
+      }
+    )
+    this.categoriesRef = base.syncState('categories/',
+      {
+        context: this,
+        state: 'categories'
       }
     )
   }
@@ -51,8 +60,6 @@ class App extends Component {
 
 
   startAction = (actionObj) => {
-
-    console.log('starting an action with...', actionObj)
     let newAction
 
     switch(actionObj.type) {
@@ -108,8 +115,15 @@ class App extends Component {
   }
 
   deleteItem = (key, id) => {
+    console.log('key', key, 'id', id)
     const newState = { ...this.state[key] }
     newState[id] = null // firebase will not sync with a deleted item. must be turned to null.
+    if (key === 'category') {
+      // also delete all foods with that category
+      for (let food in newState.foods) {
+        if (food.categoryId === id) newState[food.id] = null
+      }
+    }
     this.setState({[key]: newState})
   }
 
@@ -129,13 +143,17 @@ class App extends Component {
         }
     */
 
-    const matchesSearch = item => item.label.indexOf(this.state.searchInput) > -1
+    const matchesSearch = item => {
+      const lowerCaseLabel = item.label.toLowerCase()
+      const lowerCaseSearch = this.state.searchInput.toLowerCase()
+      return lowerCaseLabel.indexOf(lowerCaseSearch) > -1
+    }
 
     const matchingCategories =
       Object
         .entries(this.state.categories)
         .reduce((acc, [id, item]) => {
-          if (matchesSearch(item)) {
+          if (item && matchesSearch(item)) {
             item.matchesSearch = true
             acc[id] = item
           }
@@ -146,20 +164,19 @@ class App extends Component {
       Object
         .entries(this.state.foods)
         .reduce((acc, [id, item]) => {
-          if (matchesSearch(item)) {
+          if (item && matchesSearch(item)) {
             item.matchesSearch = true
             const categoryId = item.categoryId || 'none'
             // add the category to the tree if it isn't already there.
             if (!acc[categoryId]) {
               acc[categoryId] = {...this.getItemById('categories', categoryId)}
-              acc[categoryId].items = {}
             }
+            if (!acc[categoryId].items) acc[categoryId].items = {}
+            if (!acc[categoryId].id) acc[categoryId].id = categoryId
             acc[categoryId].items[id] = item
           }
           return acc
         }, matchingCategories)
-
-    console.log('withMatchingFoods', withMatchingFoods)
 
     return withMatchingFoods
   }
@@ -170,8 +187,6 @@ class App extends Component {
 
     return (
       <div className="App">
-
-        <h1>can Ella eat??</h1>
 
         <SearchBar
           searchInput = {this.state.searchInput}
@@ -187,6 +202,7 @@ class App extends Component {
           cancelAction  = {this.cancelAction}
           deleteItem    = {this.deleteItem}
           getItemById   = {this.getItemById}
+          categories    = {this.state.categories}
         />
 
         <CreateEditModal
