@@ -8,15 +8,15 @@ export default class FoodTable extends Component {
   renderCreateCategoryRow() {
     return (
       <div className="flex-row align-center justify-end create-category-row">
-          <button
-            className="circle-btn"
-            onClick={() => this.props.startAction({
-              type: 'create',
-              itemType: 'categories'
-            })}
-          >
-            <i className="fas fa-apple-crate" />
-          </button>
+        <button
+          className="circle-btn"
+          onClick={() => this.props.startAction({
+            type: 'create',
+            itemType: 'categories'
+          })}
+        >
+          <i className="fas fa-apple-crate" />
+        </button>
       </div>
     )
   }
@@ -56,7 +56,8 @@ export default class FoodTable extends Component {
 
         {category.items
           && Object
-            .entries(category.items)
+            .entries({...category.items})
+            .sort((a, b) => a.label - b.label)
             .map(([id, food], index) =>
               action
                 && action.type === 'edit'
@@ -108,7 +109,8 @@ export default class FoodTable extends Component {
             && this.renderCategory('none', uncategorised)}
 
           {Object
-            .entries(withoutUncategorised)
+            .entries({...withoutUncategorised})
+            .sort((a, b) => a.label - b.label)
             .map(([categoryId, category], i) =>
               this.renderCategory(categoryId, category, i))}
         </div>

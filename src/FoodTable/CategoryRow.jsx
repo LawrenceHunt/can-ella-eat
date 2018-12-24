@@ -56,8 +56,11 @@ export const DisplayCategoryRow = ({
   startAction
 }) => (
   <div className="flex-row align-center category-row margin-top">
-    <div className="flex-item">
-      {category.id !== 'none' ? category.label : 'Ungrouped'}
+    
+    <div className="flex-item flex-row justify-start">
+      <h1 className="margin-left">
+        {category.id !== 'none' ? category.label : 'Ungrouped'}
+      </h1>
     </div>
 
     <div>
