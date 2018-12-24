@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import React from 'react'
 import './SearchBar.css'
 
 export default ({
@@ -15,7 +15,7 @@ export default ({
       type        = "text"
       onChange    = {onChange}
       value       = {searchInput}
-      placeholder = "Plz can I haz..."
+      placeholder = "plz can I haz..."
     />
   </div>
 )

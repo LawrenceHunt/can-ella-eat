@@ -1,6 +1,10 @@
 import React from 'react'
 
 
+const handleKeyDown = (e, confirmAction) => {
+  if (e.key === 'Enter') confirmAction()
+}
+
 export const EditCategoryRow = ({
   action,
   editAction,
@@ -15,6 +19,7 @@ export const EditCategoryRow = ({
         placeholder = "Category name"
         type        = "text"
         value       = {action.payload.label}
+        onKeyDown   = {e => handleKeyDown(e, confirmAction)}
         onChange    = {e => editAction('label', e.target.value)}
       />
     </th>
@@ -54,7 +59,7 @@ export const DisplayCategoryRow = ({
 }) => (
   <tr className="category-row">
     <th>
-      {category.id !== 'none' ? category.label : ''}
+      {category.id !== 'none' ? category.label : 'Ungrouped'}
     </th>
 
     <th></th>

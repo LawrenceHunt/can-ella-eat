@@ -1,8 +1,4 @@
-@import url('https://fonts.googleapis.com/css?family=Yeseva+One');
-@import url('https://fonts.googleapis.com/css?family=Roboto');
-
-
-
+@import url('https://fonts.googleapis.com/css?family=Roboto|Thasadith');
 
 html, body, #root, .App {
   height: 100%;
@@ -11,12 +7,12 @@ html, body, #root, .App {
 }
 
 
-h1 { font-family: 'Yeseva One', cursive; }
+/* h1 { font-family: 'Yeseva One', cursive; } */
 
 body {
   font-family: 'Roboto', sans-serif;
   background: var(--turq-1);
-  color: var(--turq-5);
+  color: var(--turq-1);
 }
 
 .App {

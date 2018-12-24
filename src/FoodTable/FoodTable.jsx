@@ -27,8 +27,6 @@ export default class FoodTable extends Component {
 
   renderCategory(categoryId, category, index) {
     const {action} = this.props
-
-    console.log('action', action)
     return (
       <Fragment key={`category-${index}`}>
         {action

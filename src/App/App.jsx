@@ -59,7 +59,7 @@ class App extends Component {
   }
 
 
-  startAction = (actionObj) => {
+  startAction = actionObj => {
     let newAction
 
     switch(actionObj.type) {
@@ -115,16 +115,17 @@ class App extends Component {
   }
 
   deleteItem = (key, id) => {
-    console.log('key', key, 'id', id)
-    const newState = { ...this.state[key] }
-    newState[id] = null // firebase will not sync with a deleted item. must be turned to null.
-    if (key === 'category') {
+    const newState = { ...this.state }
+    newState[key][id] = null // firebase will not sync with a deleted item. must be turned to null.
+    if (key === 'categories') {
       // also delete all foods with that category
-      for (let food in newState.foods) {
-        if (food.categoryId === id) newState[food.id] = null
+      for (let food of Object.values(newState.foods)) {
+        if (food.categoryId === id) {
+          newState.foods[food.id] = null
+        }
       }
     }
-    this.setState({[key]: newState})
+    this.setState(newState)
   }
 
   getFilteredResults() {

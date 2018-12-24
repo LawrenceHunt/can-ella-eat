@@ -1,36 +1,40 @@
 .food-table-container {
   position  : relative;
-  top       :      80px;
+  top       :      100px;
   margin    : auto 15px;
 }
 
 input[type='text'] {
-  height         : 100%;
   color          : white;
   outline        : none;
   border         : none;
   font-size      : 16px;
-  vertical-align : middle;
   background     : transparent;
 }
 
 input[type='text']::placeholder {
-  color: white;
-  opacity: 0.4;
+  color   : white;
+  opacity : 0.4;
 }
 
 .food-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin: auto;
+  width           : 100%;
+  border-collapse : collapse;
+  margin          : auto;
 }
 
 table {
   border: none;
 }
 
-tr, th, td {
+th, td {
+  width: 33%;
   padding: 5px;
+}
+
+
+.util {
+
 }
 
 tr.food-row {
@@ -38,29 +42,25 @@ tr.food-row {
 }
 
 tr.food-row.yes {
-  background: var(--green-5);
+  background: var(--green-1);
 }
 
 tr.food-row.maybe {
-  background: var(--yellow-5);
+  background: var(--orange-1);
 }
 
 tr.food-row.no {
-  background: var(--orange-5);
+  background: var(--red-1);
 }
 
 tr.category-row {
-  background: var(--blue-4);
-  color: var(--green-1);
-  /* border-bottom: 1px solid lightgray; */
-}
-
-tr.category-row {
-  /* border: 1px solid lightgray; */
+  background : deeppink;
+  color      : var(--turq-1);
+  margin-top : 15px;
 }
 
 tr.create-category-row {
-  border: 1px solid deeppink;
+
 }
 
 tr.editing {
