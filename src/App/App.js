@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {base, db}         from '../firebase'
+import {base}             from '../firebase'
 import FoodTable          from '../FoodTable/FoodTable'
 import {generateId}       from '../_util'
 import CreateEditModal    from '../CreateEditModal/CreateEditModal'

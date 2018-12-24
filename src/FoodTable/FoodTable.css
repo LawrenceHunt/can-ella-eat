@@ -1,18 +1,17 @@
 .food-table-container {
-  margin: auto 15px;
+  position  : relative;
+  top       :      80px;
+  margin    : auto 15px;
 }
 
 input[type='text'] {
-  height: 100%;
-  color: white;
-  /* width: 100%; */
-  outline: none;
-  border: none;
-  font-size: 16px;
-  text-align: center;
-  vertical-align: middle;
-  background: transparent;
-  color: white;
+  height         : 100%;
+  color          : white;
+  outline        : none;
+  border         : none;
+  font-size      : 16px;
+  vertical-align : middle;
+  background     : transparent;
 }
 
 input[type='text']::placeholder {
@@ -23,7 +22,6 @@ input[type='text']::placeholder {
 .food-table {
   width: 100%;
   border-collapse: collapse;
-  /* border: 1px solid black; */
   margin: auto;
 }
 
@@ -33,7 +31,6 @@ table {
 
 tr, th, td {
   padding: 5px;
-  /* border: 1px solid black; */
 }
 
 tr.food-row {
@@ -60,6 +57,10 @@ tr.category-row {
 
 tr.category-row {
   /* border: 1px solid lightgray; */
+}
+
+tr.create-category-row {
+  border: 1px solid deeppink;
 }
 
 tr.editing {
