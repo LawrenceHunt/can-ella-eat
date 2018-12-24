@@ -12,8 +12,8 @@ export const EditCategoryRow = ({
   cancelAction,
   deleteItem,
 }) => (
-  <tr className="category-row editing">
-    <th>
+  <div className="flex-row align-center category-row editing">
+    <div className="flex-item">
       <input
         autoFocus
         placeholder = "Category name"
@@ -22,11 +22,9 @@ export const EditCategoryRow = ({
         onKeyDown   = {e => handleKeyDown(e, confirmAction)}
         onChange    = {e => editAction('label', e.target.value)}
       />
-    </th>
+    </div>
 
-    <th></th>
-
-    <th>
+    <div className="flex-item flex-row justify-end">
       <button
         className="circle-btn"
         onClick={() => confirmAction()}
@@ -49,22 +47,20 @@ export const EditCategoryRow = ({
           <i className="fas fa-trash-alt" />
         </button>
       ) : null}
-    </th>
-  </tr>
+    </div>
+  </div>
 )
 
 export const DisplayCategoryRow = ({
   category,
   startAction
 }) => (
-  <tr className="category-row">
-    <th>
+  <div className="flex-row align-center category-row margin-top">
+    <div className="flex-item">
       {category.id !== 'none' ? category.label : 'Ungrouped'}
-    </th>
+    </div>
 
-    <th></th>
-
-    <th>
+    <div>
       {category.id !== 'none' ? (
         <button
           className="circle-btn"
@@ -89,6 +85,6 @@ export const DisplayCategoryRow = ({
         <i className="fas fa-apple-alt" />
       </button>
 
-    </th>
-  </tr>
+    </div>
+  </div>
 )

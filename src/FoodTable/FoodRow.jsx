@@ -18,8 +18,9 @@ export class EditFoodRow extends Component {
           deleteItem} = this.props
   
     return (
-      <tr className={`food-row editing ${action.payload.canEat}`}>
-        <td>
+      <div className={`flex-row align-center food-row editing ${action.payload.canEat}`}>
+        
+        <div className="flex-item">
           <input
             autoFocus
             tabIndex    = {1}
@@ -29,29 +30,29 @@ export class EditFoodRow extends Component {
             onKeyDown   = {e => this.handleKeyDown(e, 'label')}
             onChange    = {e => this.handleInputChange(e, 'label')}
           />
+        </div>
 
-          <span className="pull-right">
-            <button
-              onClick={() => editAction('canEat', 'yes')}
-              className={`color-btn green ${action.payload.canEat === 'yes' ? 'active' : ''}`}
-            >
-            </button>
+        <div className="flex-item">
+          <button
+            onClick={() => editAction('canEat', 'yes')}
+            className={`color-btn green ${action.payload.canEat === 'yes' ? 'active' : ''}`}
+          >
+          </button>
 
-            <button
-              onClick={() => editAction('canEat', 'maybe')}
-              className={`color-btn orange ${action.payload.canEat === 'maybe' ? 'active' : ''}`}
-            >
-            </button>
+          <button
+            onClick={() => editAction('canEat', 'maybe')}
+            className={`color-btn orange ${action.payload.canEat === 'maybe' ? 'active' : ''}`}
+          >
+          </button>
 
-            <button
-              onClick={() => editAction('canEat', 'no')}
-              className={`color-btn red ${action.payload.canEat === 'no' ? 'active' : ''}`}
-            >
-            </button>
-          </span>
-        </td>
+          <button
+            onClick={() => editAction('canEat', 'no')}
+            className={`color-btn red ${action.payload.canEat === 'no' ? 'active' : ''}`}
+          >
+          </button>
+        </div>
 
-        <td>
+        <div className="flex-item">
           <input
             type        = 'text'
             placeholder = 'Notes...'
@@ -60,9 +61,9 @@ export class EditFoodRow extends Component {
             onKeyDown   = {e => this.handleKeyDown(e, 'notes')}
             onChange    = {e => this.handleInputChange(e, 'notes')}
           />
-        </td>
+        </div>
 
-        <td>
+        <div className="flex-item flex-row justify-end">
           <button
             className="circle-btn"
             onClick={confirmAction}
@@ -84,8 +85,8 @@ export class EditFoodRow extends Component {
               <i className="fas fa-trash-alt" />
             </button>
           ) : null}
-        </td>
-      </tr>
+        </div>
+      </div>
     )
   }
 }
@@ -94,17 +95,17 @@ export const DisplayFoodRow = ({
   food,
   startAction
 }) => (
-  <tr className={`food-row ${food.canEat}`}>
+  <div className={`flex-row align-center food-row ${food.canEat}`}>
 
-    <td>
+    <div className="flex-item">
       {food.label}
-    </td>
+    </div>
 
-    <td>
+    <div className="flex-item">
       {food.notes}
-    </td>
+    </div>
 
-    <td>
+    <div className="flex-item flex-row justify-end">
       <button
         className="circle-btn"
         onClick={() => startAction({
@@ -115,7 +116,7 @@ export const DisplayFoodRow = ({
       >
         <i className="fas fa-cog" />
       </button>
-    </td>
+    </div>
 
-  </tr>
+  </div>
 )

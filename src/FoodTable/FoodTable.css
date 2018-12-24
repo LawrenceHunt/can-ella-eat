@@ -33,36 +33,33 @@ th, td {
 }
 
 
-.util {
-
+.food-row {
+  padding: 5px;
 }
 
-tr.food-row {
-
-}
-
-tr.food-row.yes {
+.food-row.yes {
   background: var(--green-1);
 }
 
-tr.food-row.maybe {
+.food-row.maybe {
   background: var(--orange-1);
 }
 
-tr.food-row.no {
+.food-row.no {
   background: var(--red-1);
 }
 
-tr.category-row {
+.category-row {
   background : deeppink;
   color      : var(--turq-1);
   margin-top : 15px;
+  padding    : 5px;
 }
 
-tr.create-category-row {
+.create-category-row {
 
 }
 
-tr.editing {
+.editing {
   outline: 2px dashed white;
 }
