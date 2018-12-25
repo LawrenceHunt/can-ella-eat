@@ -30,14 +30,14 @@ export const EditCategoryRow = ({
         className = "circle-btn"
         onClick   = {() => confirmAction()}
       >
-        <i className="fas fa-check" />
+        Yep
       </button>
 
       <button
         className = "circle-btn"
         onClick   = {() => cancelAction()}
       >
-        <i className="fas fa-times" />
+        Nope
       </button>
 
       {action.payload.id !== 'none' && action.type === 'edit' ? (
@@ -45,7 +45,7 @@ export const EditCategoryRow = ({
           className = "circle-btn"
           onClick   = {() => deleteItem('categories', action.payload.id)}
         >
-          <i className="fas fa-trash-alt" />
+          Del
         </button>
       ) : null}
     </div>
@@ -74,7 +74,7 @@ export const DisplayCategoryRow = ({
             id       : category.id
           })}
         >
-          <i className="fas fa-cog" />
+         Edit
         </button>
       ) : null}
 
@@ -86,7 +86,7 @@ export const DisplayCategoryRow = ({
           categoryId : category.id
         })}
       >
-        <i className="fas fa-apple-alt" />
+        <i className="fas fa-plus" />
       </button>
 
     </div>

@@ -10,6 +10,13 @@ export class EditFoodRow extends Component {
     this.props.editAction(key, e.target.value)
   }
 
+  toggleColor() {
+    const current = this.props.action.payload.canEat
+    if (current==='yes') this.props.editAction('canEat', 'maybe')
+    if (current === 'maybe') this.props.editAction('canEat', 'no')
+    if (current === 'no') this.props.editAction('canEat', 'yes')
+  }
+
   render() {
     const {action,
           editAction,
@@ -35,20 +42,8 @@ export class EditFoodRow extends Component {
 
         <div className="flex-item">
           <button
-            onClick={() => editAction('canEat', 'yes')}
-            className={`color-btn green ${action.payload.canEat === 'yes' ? 'active' : ''}`}
-          >
-          </button>
-
-          <button
-            onClick={() => editAction('canEat', 'maybe')}
-            className={`color-btn orange ${action.payload.canEat === 'maybe' ? 'active' : ''}`}
-          >
-          </button>
-
-          <button
-            onClick={() => editAction('canEat', 'no')}
-            className={`color-btn red ${action.payload.canEat === 'no' ? 'active' : ''}`}
+            onClick={() => this.toggleColor()}
+            className={`color-btn ${action.payload.canEat}`}
           >
           </button>
         </div>
@@ -70,21 +65,21 @@ export class EditFoodRow extends Component {
             className="circle-btn"
             onClick={confirmAction}
           >
-            <i className="fas fa-check" />
+            Yep
           </button>
 
           <button
             className="circle-btn"
             onClick={cancelAction}
           >
-            <i className="fas fa-times" />
+            Nope
           </button>
           {action.type === 'edit' ? (
             <button
               className="circle-btn"
               onClick={() => deleteItem('foods', action.payload.id)}
             >
-              <i className="fas fa-trash-alt" />
+              Del
             </button>
           ) : null}
         </div>
@@ -116,7 +111,7 @@ export const DisplayFoodRow = ({
           id: food.id
         })}
       >
-        <i className="fas fa-cog" />
+        Edit
       </button>
     </div>
 

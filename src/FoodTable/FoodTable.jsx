@@ -16,7 +16,7 @@ export default class FoodTable extends Component {
             itemType: 'categories'
           })}
         >
-          <i className="fas fa-apple-crate" />
+          <i className="fas fa-plus" />
         </button>
       </div>
     )

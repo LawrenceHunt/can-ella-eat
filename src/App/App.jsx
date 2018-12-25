@@ -151,7 +151,7 @@ class App extends Component {
       Object
         .entries(this.state.categories)
         .reduce((acc, [id, item]) => {
-          if (item && matchesSearch(item)) {
+          if (item && item.label && matchesSearch(item)) {
             item.matchesSearch = true
             acc[id] = {...item}
           }
@@ -163,7 +163,7 @@ class App extends Component {
       Object
         .entries(this.state.foods)
         .reduce((acc, [id, item]) => {
-          if (item && matchesSearch(item)) {
+          if (item && item.label && matchesSearch(item)) {
             item.matchesSearch = true
             const categoryId = item.categoryId || 'none'
             // add the category to the tree if it isn't already there.
