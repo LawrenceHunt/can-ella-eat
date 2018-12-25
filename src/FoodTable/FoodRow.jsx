@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import React, {Component, Fragment} from 'react'
 
 export class EditFoodRow extends Component {
 
@@ -10,6 +10,22 @@ export class EditFoodRow extends Component {
     this.props.editAction(key, e.target.value)
   }
 
+  renderFoodLabelInput() {
+    const {action} = this.props
+    return (
+      <input
+        className="food-input"
+        autoFocus
+        tabIndex={1}
+        type='text'
+        placeholder="Food name"
+        value={action.payload.label}
+        onKeyDown={e => this.handleKeyDown(e, 'label')}
+        onChange={e => this.handleInputChange(e, 'label')}
+      />
+    )
+  }
+
   toggleColor() {
     const current = this.props.action.payload.canEat
     if (current==='yes') this.props.editAction('canEat', 'maybe')
@@ -17,71 +33,91 @@ export class EditFoodRow extends Component {
     if (current === 'no') this.props.editAction('canEat', 'yes')
   }
 
+  renderColorToggleButton() {
+    const {action} = this.props
+    return (
+      <button
+        onClick={() => this.toggleColor()}
+        className={`color-btn ${action.payload.canEat}`}
+      >
+        Tap to change colour
+      </button>
+    )
+  }
+
+  renderUtilButtons() {
+    const {confirmAction, 
+          cancelAction, 
+          deleteItem, 
+          action} = this.props 
+
+    return (
+      <Fragment>
+        <button
+          className="circle-btn"
+          onClick={confirmAction}
+        >
+          <i className="fas fa-check" />
+        </button>
+
+        <button
+          className="circle-btn"
+          onClick={cancelAction}
+        >
+          <i className="fas fa-times" />
+        </button>
+
+        {action.type === 'edit' ? (
+          <button
+            className="circle-btn"
+            onClick={() => deleteItem('foods', action.payload.id)}
+          >
+            <i className="fas fa-trash-alt" />
+          </button>
+        ) : null}
+      </Fragment>
+    )
+  }
+
+  renderNotesInput() {
+    const {action} = this.props
+
+    return (
+      <input
+        className="food-input"
+        type='text'
+        placeholder='Notes...'
+        tabIndex={2}
+        value={action.payload.notes}
+        onKeyDown={e => this.handleKeyDown(e, 'notes')}
+        onChange={e => this.handleInputChange(e, 'notes')}
+      />
+    )
+  }
+
+
   render() {
-    const {action,
-          editAction,
-          confirmAction,
-          cancelAction,
-          deleteItem} = this.props
+    const {action} = this.props
   
     return (
       <div className={`flex-row align-center food-row editing ${action.payload.canEat}`}>
         
-        <div className="flex-item flex-row justify-start full-w full-h">
-          <input
-            className   = "food-input"
-            autoFocus
-            tabIndex    = {1}
-            type        = 'text'
-            placeholder = "Food name"
-            value       = {action.payload.label}
-            onKeyDown   = {e => this.handleKeyDown(e, 'label')}
-            onChange    = {e => this.handleInputChange(e, 'label')}
-          />
+        <div className="flex-item flex-column justify-spaced">
+          <div className="full-w flex-item flex-row align-center margin-bottom">
+            {this.renderFoodLabelInput()}
+          </div>
+
+          <div className="full-w full-h flex-row flex-item align-center justify-start margin-bottom">
+            {this.renderColorToggleButton()}
+          </div>
+
+          <div className="full-w flex-row flex-item align-center">
+            {this.renderNotesInput()}
+          </div>
         </div>
 
-        <div className="flex-item">
-          <button
-            onClick={() => this.toggleColor()}
-            className={`color-btn ${action.payload.canEat}`}
-          >
-          </button>
-        </div>
-
-        <div className="flex-item full-w full-h">
-          <input
-            className   = "food-input"
-            type        = 'text'
-            placeholder = 'Notes...'
-            tabIndex    = {2}
-            value       = {action.payload.notes}
-            onKeyDown   = {e => this.handleKeyDown(e, 'notes')}
-            onChange    = {e => this.handleInputChange(e, 'notes')}
-          />
-        </div>
-
-        <div className="flex-item flex-row justify-end">
-          <button
-            className="circle-btn"
-            onClick={confirmAction}
-          >
-            Yep
-          </button>
-
-          <button
-            className="circle-btn"
-            onClick={cancelAction}
-          >
-            Nope
-          </button>
-          {action.type === 'edit' ? (
-            <button
-              className="circle-btn"
-              onClick={() => deleteItem('foods', action.payload.id)}
-            >
-              Del
-            </button>
-          ) : null}
+        <div className="flex-column align-center">
+          {this.renderUtilButtons()}
         </div>
       </div>
     )

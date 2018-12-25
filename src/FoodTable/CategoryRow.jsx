@@ -17,7 +17,7 @@ export const EditCategoryRow = ({
       <input
         className   = "category-input"
         autoFocus
-        placeholder = "Category name"
+        placeholder = "Group name"
         type        = "text"
         value       = {action.payload.label}
         onKeyDown   = {e => handleKeyDown(e, confirmAction)}

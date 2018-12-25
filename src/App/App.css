@@ -42,10 +42,12 @@ body {
 .align-left     { text-align: left; }
 
 .flex-row       { display: flex;}
+.flex-column    { display: flex; flex-direction: column; }
 .align-center   { align-items: center; }
 .justify-center { justify-content: center; }
 .justify-start  { justify-content: flex-start; }
 .justify-end    { justify-content: flex-end; }
+.justify-spaced { justify-content: space-between; }
 .flex-item      { flex: 1; }
 .margin-right   { margin-right: 1rem; }
 .margin-left    { margin-left: 1rem; }
