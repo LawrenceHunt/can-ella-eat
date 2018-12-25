@@ -60,7 +60,7 @@ export default class FoodTable extends Component {
         {category.items
           && Object
             .entries({...category.items})
-            .sort((a, b) => a.label && b.label ? a.label.localeCompare(b.label) : -1)
+            .sort((a, b) => a[1] && b[1] && a[1].label && b[1].label ? a[1].label.localeCompare(b[1].label) : -1)
             .map(([id, food], index) =>
               action
                 && action.type === 'edit'
@@ -90,11 +90,7 @@ export default class FoodTable extends Component {
 
   render() {
     const { contentTree, action } = this.props
-    const uncategorised = contentTree['none']
-
-    const withoutUncategorised = {...contentTree}
-    delete withoutUncategorised['none']
-
+  
     return (
       <div className="food-table-container">
 
@@ -107,12 +103,9 @@ export default class FoodTable extends Component {
             ? <div className="category-section"><EditCategoryRow {...this.props} /></div>
             : null}
 
-          {uncategorised
-            && this.renderCategory('none', uncategorised)}
-
           {Object
-            .entries({...withoutUncategorised})
-            .sort((a, b) => a.label && b.label ? a.label.localeCompare(b.label) : -1)
+            .entries(contentTree)
+            .sort((a, b) => a[1] && b[1] && a[1].label && b[1].label ? a[1].label.localeCompare(b[1].label) : -1)
             .map(([categoryId, category], i) =>
               this.renderCategory(categoryId, category, i))}
         </div>
