@@ -34,25 +34,21 @@ class App extends Component {
     return Object.assign({}, types[key], {id})
   }
 
-  getItemById = (type, id) => {
-    if (type==='categories' && id==='none') return {label: 'None'}
-    return Object.values(this.state[type]).find(item => item && item.id === id)
+ 
+  componentWillMount() {
+    this.foodsRef = base.syncState('foods/',
+      {
+        context: this,
+        state: 'foods'
+      }
+    )
+    this.categoriesRef = base.syncState('categories/',
+      {
+        context: this,
+        state: 'categories'
+      }
+    )
   }
-
-  // componentWillMount() {
-  //   this.foodsRef = base.syncState('foods/',
-  //     {
-  //       context: this,
-  //       state: 'foods'
-  //     }
-  //   )
-  //   this.categoriesRef = base.syncState('categories/',
-  //     {
-  //       context: this,
-  //       state: 'categories'
-  //     }
-  //   )
-  // }
 
   componentWillUnmount() {
     base.removeBinding(this.foodsRef)
@@ -87,7 +83,7 @@ class App extends Component {
         console.warn('startAction called with no action type: ', actionObj)
         return
     }
-    console.log('newAction', newAction)
+
     this.setState({action: newAction})
   }
 
@@ -117,7 +113,6 @@ class App extends Component {
 
   deleteItem = (key, id) => {
     const newState = { ...this.state }
-    console.log('delete: ', key, id)
     newState[key][id] = null // firebase will not sync with a deleted item. must be turned to null.
     if (key === 'categories') {
       // also delete all foods with that category
@@ -207,7 +202,6 @@ class App extends Component {
           confirmAction = {this.confirmAction}
           cancelAction  = {this.cancelAction}
           deleteItem    = {this.deleteItem}
-          getItemById   = {this.getItemById}
           categories    = {this.state.categories}
         />
 

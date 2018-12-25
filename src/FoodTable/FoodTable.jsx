@@ -45,6 +45,8 @@ export default class FoodTable extends Component {
         {action
           && action.type === 'create'
           && action.itemType === 'foods'
+          && action.payload
+          && action.payload.categoryId
           && action.payload.categoryId === categoryId
           ? <EditFoodRow
               action        = {action}
@@ -88,9 +90,6 @@ export default class FoodTable extends Component {
 
   render() {
     const { contentTree, action } = this.props
-
-    // console.log('contentTree', contentTree)
-
     const uncategorised = contentTree['none']
 
     const withoutUncategorised = {...contentTree}
