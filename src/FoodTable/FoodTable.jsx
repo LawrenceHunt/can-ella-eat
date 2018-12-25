@@ -1,7 +1,8 @@
-import React, {Component, Fragment} from 'react'
-import {EditCategoryRow, DisplayCategoryRow} from './CategoryRow.jsx'
-import {EditFoodRow, DisplayFoodRow} from './FoodRow.jsx'
-
+import React, {Component}   from 'react'
+import {EditCategoryRow, 
+        DisplayCategoryRow} from './CategoryRow.jsx'
+import {EditFoodRow, 
+        DisplayFoodRow}     from './FoodRow.jsx'
 import './FoodTable.css'
 
 export default class FoodTable extends Component {
@@ -24,7 +25,7 @@ export default class FoodTable extends Component {
   renderCategory(categoryId, category, index) {
     const {action} = this.props
     return (
-      <Fragment key={`category-${index}`}>
+      <div className="category-section" key={`category-${index}`}>
         {action
           && action.type === 'edit'
           && action.itemType === 'categories'
@@ -57,7 +58,7 @@ export default class FoodTable extends Component {
         {category.items
           && Object
             .entries({...category.items})
-            .sort((a, b) => a.label - b.label)
+            .sort((a, b) => a.label && b.label ? a.label.localeCompare(b.label) : -1)
             .map(([id, food], index) =>
               action
                 && action.type === 'edit'
@@ -80,13 +81,15 @@ export default class FoodTable extends Component {
                   /> 
             )
         }
-      </Fragment>
+      </div>
     )
   }
 
 
   render() {
     const { contentTree, action } = this.props
+
+    // console.log('contentTree', contentTree)
 
     const uncategorised = contentTree['none']
 
@@ -102,7 +105,7 @@ export default class FoodTable extends Component {
           {action
             && action.type === 'create'
             && action.itemType === 'categories'
-            ? <EditCategoryRow {...this.props} />
+            ? <div className="category-section"><EditCategoryRow {...this.props} /></div>
             : null}
 
           {uncategorised
@@ -110,7 +113,7 @@ export default class FoodTable extends Component {
 
           {Object
             .entries({...withoutUncategorised})
-            .sort((a, b) => a.label - b.label)
+            .sort((a, b) => a.label && b.label ? a.label.localeCompare(b.label) : -1)
             .map(([categoryId, category], i) =>
               this.renderCategory(categoryId, category, i))}
         </div>

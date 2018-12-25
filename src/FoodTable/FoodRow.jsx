@@ -20,8 +20,9 @@ export class EditFoodRow extends Component {
     return (
       <div className={`flex-row align-center food-row editing ${action.payload.canEat}`}>
         
-        <div className="flex-item">
+        <div className="flex-item flex-row justify-start full-w full-h">
           <input
+            className   = "food-input"
             autoFocus
             tabIndex    = {1}
             type        = 'text'
@@ -52,8 +53,9 @@ export class EditFoodRow extends Component {
           </button>
         </div>
 
-        <div className="flex-item">
+        <div className="flex-item full-w full-h">
           <input
+            className   = "food-input"
             type        = 'text'
             placeholder = 'Notes...'
             tabIndex    = {2}
@@ -97,12 +99,12 @@ export const DisplayFoodRow = ({
 }) => (
   <div className={`flex-row align-center food-row ${food.canEat}`}>
 
-    <div className="flex-item">
-      {food.label}
+    <div className="flex-item flex-row justify-center full-w full-h">
+      <span className="margin-left">{food.label}</span>
     </div>
 
     <div className="flex-item">
-      {food.notes}
+      <span className="margin-left align-left">{food.notes}</span>
     </div>
 
     <div className="flex-item flex-row justify-end">

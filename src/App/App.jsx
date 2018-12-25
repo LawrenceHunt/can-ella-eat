@@ -39,20 +39,20 @@ class App extends Component {
     return Object.values(this.state[type]).find(item => item && item.id === id)
   }
 
-  componentWillMount() {
-    this.foodsRef = base.syncState('foods/',
-      {
-        context: this,
-        state: 'foods'
-      }
-    )
-    this.categoriesRef = base.syncState('categories/',
-      {
-        context: this,
-        state: 'categories'
-      }
-    )
-  }
+  // componentWillMount() {
+  //   this.foodsRef = base.syncState('foods/',
+  //     {
+  //       context: this,
+  //       state: 'foods'
+  //     }
+  //   )
+  //   this.categoriesRef = base.syncState('categories/',
+  //     {
+  //       context: this,
+  //       state: 'categories'
+  //     }
+  //   )
+  // }
 
   componentWillUnmount() {
     base.removeBinding(this.foodsRef)
@@ -77,9 +77,9 @@ class App extends Component {
 
       case 'edit':
         newAction = {
-          type: 'edit',
-          itemType: actionObj.itemType,
-          payload: this.state[actionObj.itemType][actionObj.id]
+          type     : 'edit',
+          itemType : actionObj.itemType,
+          payload  : this.state[actionObj.itemType][actionObj.id]
         }
         break
 
@@ -87,7 +87,7 @@ class App extends Component {
         console.warn('startAction called with no action type: ', actionObj)
         return
     }
-
+    console.log('newAction', newAction)
     this.setState({action: newAction})
   }
 
@@ -104,6 +104,7 @@ class App extends Component {
 
     const newState = {...this.state[itemType]}
     newState[id] = payload
+
     this.setState({
       [itemType]: newState,
       action: null
@@ -116,11 +117,12 @@ class App extends Component {
 
   deleteItem = (key, id) => {
     const newState = { ...this.state }
+    console.log('delete: ', key, id)
     newState[key][id] = null // firebase will not sync with a deleted item. must be turned to null.
     if (key === 'categories') {
       // also delete all foods with that category
       for (let food of Object.values(newState.foods)) {
-        if (food.categoryId === id) {
+        if (food && food.categoryId === id) {
           newState.foods[food.id] = null
         }
       }
@@ -130,18 +132,18 @@ class App extends Component {
 
   getFilteredResults() {
     /*
-        return a tree object looking like this:
+      return a tree object looking like this:
 
-        {
-          categoryId: {
+      {
+        categoryId: {
+          matchesSearch: Boolean,
+          items: {
+            itemId: String,
             matchesSearch: Boolean,
-            items: {
-              itemId: String,
-              matchesSearch: Boolean,
-              ...otherItemProps
-            }
+            ...otherItemProps
           }
         }
+      }
     */
 
     const matchesSearch = item => {
@@ -149,18 +151,19 @@ class App extends Component {
       const lowerCaseSearch = this.state.searchInput.toLowerCase()
       return lowerCaseLabel.indexOf(lowerCaseSearch) > -1
     }
-
+    
     const matchingCategories =
       Object
         .entries(this.state.categories)
         .reduce((acc, [id, item]) => {
           if (item && matchesSearch(item)) {
             item.matchesSearch = true
-            acc[id] = item
+            acc[id] = {...item}
           }
           return acc
         }, {})
-
+    
+   
     const withMatchingFoods =
       Object
         .entries(this.state.foods)
@@ -170,15 +173,17 @@ class App extends Component {
             const categoryId = item.categoryId || 'none'
             // add the category to the tree if it isn't already there.
             if (!acc[categoryId]) {
-              acc[categoryId] = {...this.getItemById('categories', categoryId)}
+              acc[categoryId] = {...this.state.categories[categoryId]}
             }
+            
             if (!acc[categoryId].items) acc[categoryId].items = {}
             if (!acc[categoryId].id) acc[categoryId].id = categoryId
             acc[categoryId].items[id] = item
           }
+          
           return acc
-        }, matchingCategories)
-
+        }, {...matchingCategories})
+    
     return withMatchingFoods
   }
 

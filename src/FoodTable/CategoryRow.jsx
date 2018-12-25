@@ -15,6 +15,7 @@ export const EditCategoryRow = ({
   <div className="flex-row align-center category-row editing">
     <div className="flex-item">
       <input
+        className   = "category-input"
         autoFocus
         placeholder = "Category name"
         type        = "text"
@@ -26,23 +27,23 @@ export const EditCategoryRow = ({
 
     <div className="flex-item flex-row justify-end">
       <button
-        className="circle-btn"
-        onClick={() => confirmAction()}
+        className = "circle-btn"
+        onClick   = {() => confirmAction()}
       >
         <i className="fas fa-check" />
       </button>
 
       <button
-        className="circle-btn"
-        onClick={() => cancelAction()}
+        className = "circle-btn"
+        onClick   = {() => cancelAction()}
       >
         <i className="fas fa-times" />
       </button>
 
       {action.payload.id !== 'none' && action.type === 'edit' ? (
         <button
-          className="circle-btn"
-          onClick={() => deleteItem('categories', action.payload.id)}
+          className = "circle-btn"
+          onClick   = {() => deleteItem('categories', action.payload.id)}
         >
           <i className="fas fa-trash-alt" />
         </button>
@@ -55,7 +56,7 @@ export const DisplayCategoryRow = ({
   category,
   startAction
 }) => (
-  <div className="flex-row align-center category-row margin-top">
+  <div className="flex-row align-center category-row">
     
     <div className="flex-item flex-row justify-start">
       <h1 className="margin-left">
@@ -68,9 +69,9 @@ export const DisplayCategoryRow = ({
         <button
           className="circle-btn"
           onClick={() => startAction({
-            type: 'edit',
-            itemType: 'categories',
-            id: category.id
+            type     : 'edit',
+            itemType : 'categories',
+            id       : category.id
           })}
         >
           <i className="fas fa-cog" />
@@ -80,9 +81,9 @@ export const DisplayCategoryRow = ({
       <button
         className="circle-btn"
         onClick={() => startAction({
-          type: 'create',
-          itemType: 'foods',
-          categoryId: category.id
+          type       : 'create',
+          itemType   : 'foods',
+          categoryId : category.id
         })}
       >
         <i className="fas fa-apple-alt" />

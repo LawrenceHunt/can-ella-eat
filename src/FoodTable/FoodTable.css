@@ -10,11 +10,21 @@ input[type='text'] {
   border         : none;
   font-size      : 16px;
   background     : transparent;
+  width          : 100%;
+  margin-left    : 1rem;
 }
 
 input[type='text']::placeholder {
   color   : white;
   opacity : 0.4;
+}
+
+input.category-input {
+  font-size: 22px;
+}
+
+input.category-input::placeholder {
+  font-size: 22px;
 }
 
 .food-table {
@@ -32,6 +42,12 @@ th, td {
   padding: 5px;
 }
 
+.category-section {
+  overflow      : hidden;
+  border-radius : 5px;
+  margin-top    : 15px;
+  border        : 3px solid deeppink;
+}
 
 .food-row {
   padding: 5px;
@@ -51,15 +67,12 @@ th, td {
 
 .category-row {
   background : deeppink;
-  color      : var(--turq-1);
-  margin-top : 15px;
   padding    : 5px;
 }
 
 .create-category-row {
-
 }
 
 .editing {
-  outline: 2px dashed white;
+  border: 2px dashed white;
 }

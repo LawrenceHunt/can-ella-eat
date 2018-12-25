@@ -7,12 +7,15 @@ html, body, #root, .App {
 }
 
 
-h1 { font-size: 22px; margin: 0;}
+h1 { 
+  font-size: 22px; 
+  margin: 0;
+}
 
 body {
   font-family: 'Roboto', sans-serif;
   background: var(--turq-1);
-  color: var(--turq-1);
+  color: white;
 }
 
 .App {
@@ -32,6 +35,11 @@ body {
     transform: rotate(360deg);
   }
 }
+
+.full-w { width: 100%; }
+.full-h { height: 100%; }
+
+.align-left     { text-align: left; }
 
 .flex-row       { display: flex;}
 .align-center   { align-items: center; }
