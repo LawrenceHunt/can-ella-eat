@@ -104,7 +104,7 @@ export default class FoodTable extends Component {
             : null}
 
           {Object
-            .entries(contentTree)
+            .entries({...contentTree})
             .sort((a, b) => a[1] && b[1] && a[1].label && b[1].label ? a[1].label.localeCompare(b[1].label) : -1)
             .map(([categoryId, category], i) =>
               this.renderCategory(categoryId, category, i))}
